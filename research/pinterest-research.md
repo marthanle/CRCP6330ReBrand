@@ -61,6 +61,26 @@ Pinterest's current long-press (hold on a pin) menu shows 4 fixed quick actions:
 
 **Scope note for MVP:** Simple to fake for a demo — a settings panel with checkboxes/reorder for a fixed action list, feeding into the long-press menu's rendered order. No real download/share functionality needed, just wiring the UI to prove the customization concept.
 
+## Precedent Research for the 3 Confirmed Features
+
+Full feature specs live in [features.md](features.md). Findings below validate each against existing products.
+
+### 1. Customizable Long-Press Quick Actions
+- No mainstream social/creative app has shipped a *user-customizable* long-press/context-action menu with a picker UI — this remains a genuine gap, not a re-implementation of an existing feature ([QuickActionView — GitHub](https://github.com/Commit451/QuickActionView)).
+- OS-level precedent shows the pattern is well understood by users: macOS lets people enable/disable Quick Actions and assign keyboard shortcuts via System Settings → Extensions ([MacMost](https://macmost.com/customizing-the-mac-context-menu.html)); Windows 11 supports adding custom shortcuts to the right-click context menu ([Windows Central](https://www.windowscentral.com/software-apps/windows-11/how-to-integrate-custom-context-menu-shortcuts-on-windows-11), [Tom's Hardware](https://www.tomshardware.com/software/windows/how-to-add-custom-shortcuts-to-the-windows-11-or-10-context-menu)); iOS Home Screen quick actions work as long-press shortcut menus per app ([Better Programming — iOS 13 Quick Actions](https://betterprogramming.pub/handling-ios-13-quick-actions-67f9e304dcc6)).
+- Takeaway: users already have a mental model for "long-press/right-click menu is configurable" from their OS — porting that expectation into Pinterest is a low-learning-curve win.
+
+### 2. Chronological Feed Toggle
+- X (Twitter) already ships this exact pattern: a "For You" / "Following" tab toggle, where Following shows a reverse-chronological timeline of accounts you follow ([$99 Social](https://www.99dollarsocial.com/blog/benefits-of-twitters-chronological-timeline), [MakeUseOf](https://www.makeuseof.com/tag/switch-chronological-twitter-timeline/)).
+- Instagram tested/shipped three feed-sorting options — Home (algorithmic), Favorites, and Following — with the latter two chronological ([PhoneArena](https://www.phonearena.com/news/instagram-chronological-feed-options_id137603), [TechRadar](https://www.techradar.com/news/instagram-is-testing-an-option-to-show-the-latest-posts-first)).
+- Caveat worth noting to the team: X recently started algorithmically re-ranking even its "Following" feed by predicted engagement, requiring a further "Switch to Latest" option to get true chronological order ([Social Media Today](https://www.socialmediatoday.com/news/x-formerly-twitter-sorts-following-feed-algorithm-ai-grok/806617/), [PiunikaWeb](https://piunikaweb.com/2026/02/15/x-following-feed-not-in-chronological-order-heres-what-we-know/)) — a reminder to keep our "Newest" mode strictly chronological with no algorithmic re-ranking, since that erosion is exactly the pain point we're fixing.
+- Takeaway: this is a validated, well-understood pattern with two major platforms as direct precedent — low risk, high user-recognition.
+
+### 3. Board-View Layout Switcher
+- Notion's database view switcher lets users change how the same underlying items render (table, board, list, gallery, calendar, etc.) without changing the data itself — switching views is purely presentational ([Notion Help](https://www.notion.com/help/views-filters-and-sorts), [Super.so — All Notion Database Views](https://super.so/blog/notion-database-views)); Notion's Board and Gallery views even expose a "Card size" layout control ([Notion Help — Boards](https://www.notion.com/help/boards)).
+- Airtable ships six interchangeable views (Grid, Gallery, Kanban, Calendar, Timeline, Form) over the same records, with Gallery view offering a "Customize cards" control for which fields show ([Airtable Support](https://support.airtable.com/docs/getting-started-with-airtable-gallery-views), [Zapier — Airtable Views](https://zapier.com/blog/airtable-views/)).
+- Takeaway: "same data, switchable layout" is an established, low-risk UX pattern in productivity tools — our masonry/grid/list switcher applies that same idea to a visual-discovery context where Pinterest currently offers none of it.
+
 ## Scoped MVP (single class session, team of 3–4)
 
 Static/local web app, no real backend or auth, seeded fake dataset (~30 pins: `image, title, source, isAI, linkStatus, trustScore`).
@@ -88,3 +108,19 @@ Tech choice: plain HTML/CSS/JS (fastest to demo) or React if team is already flu
 - [What Is Pinterest? Features, Search, Boards, Shopping — DocumentaryTube](https://www.documentarytube.com/blog/what-is-pinterest-discovering-its-features-functionality-and-uses/)
 - [Pinterest Shop Guide 2026 — Savings Grove](https://savingsgrove.com/blogs/guides/pinterest-shop-guide)
 - [Pinterest UI/UX Review: Design Masterclass — CreateBytes](https://createbytes.com/insights/pinterest-ui-ux-review-boom-or-bloom)
+- [QuickActionView — GitHub](https://github.com/Commit451/QuickActionView)
+- [Customizing the Mac Context Menu — MacMost](https://macmost.com/customizing-the-mac-context-menu.html)
+- [How to integrate custom context menu shortcuts on Windows 11 — Windows Central](https://www.windowscentral.com/software-apps/windows-11/how-to-integrate-custom-context-menu-shortcuts-on-windows-11)
+- [How to Add Custom Shortcuts to the Windows Context Menu — Tom's Hardware](https://www.tomshardware.com/software/windows/how-to-add-custom-shortcuts-to-the-windows-11-or-10-context-menu)
+- [Handling iOS 13 Quick Actions — Better Programming](https://betterprogramming.pub/handling-ios-13-quick-actions-67f9e304dcc6)
+- [How to Use X's Chronological Timeline in 2026 — $99 Social](https://www.99dollarsocial.com/blog/benefits-of-twitters-chronological-timeline)
+- [How to Switch to a Chronological X (Twitter) Timeline — MakeUseOf](https://www.makeuseof.com/tag/switch-chronological-twitter-timeline/)
+- [Instagram announces three new feed options — PhoneArena](https://www.phonearena.com/news/instagram-chronological-feed-options_id137603)
+- [Instagram is testing an option to show the latest posts first — TechRadar](https://www.techradar.com/news/instagram-is-testing-an-option-to-show-the-latest-posts-first)
+- [X Now Algorithmically Ranks Posts in Following Feed — Social Media Today](https://www.socialmediatoday.com/news/x-formerly-twitter-sorts-following-feed-algorithm-ai-grok/806617/)
+- [X Following feed not in chronological order — PiunikaWeb](https://piunikaweb.com/2026/02/15/x-following-feed-not-in-chronological-order-heres-what-we-know/)
+- [Database views, filters, sorts & groups — Notion Help](https://www.notion.com/help/views-filters-and-sorts)
+- [All Notion Database Views Explained — Super.so](https://super.so/blog/notion-database-views)
+- [Board view (Kanban) in Notion — Notion Help](https://www.notion.com/help/boards)
+- [Getting started with Airtable Gallery Views — Airtable Support](https://support.airtable.com/docs/getting-started-with-airtable-gallery-views)
+- [How to create and customize Airtable views — Zapier](https://zapier.com/blog/airtable-views/)
