@@ -16,16 +16,15 @@ Full background research — current Pinterest pain points, existing features to
 
 Full specs and implementation notes for each are in [research/features.md](research/features.md).
 
-1. **Customizable long-press quick actions** — defaults to Pinterest's current 4 (See less, See more, Share, Save); a settings screen lets users customize the menu using actions already available elsewhere in the app (e.g. Download image, Hide, Report, Copy link).
+1. **Customizable quick actions** — defaults to Pinterest's current 4 (See less, See more, Share, Save), customizable from a settings screen using actions already available elsewhere in the app (e.g. Download image, Hide, Report, Copy link). Two interaction surfaces share one config: a hover-reveal action bar on desktop, and a long-press menu on mobile (desktop web has no long-press gesture).
 2. **Chronological feed toggle** — a "For You" / "Newest" switch on the home feed, so users can escape the algorithmic feed and see strictly newest-first content from who they follow.
 3. **Board-view layout switcher** — per-board toggle between Masonry (today's default), Grid (uniform square crops), and List (thumbnail + title + tags), since one layout doesn't fit all board types (outfits vs. room comparisons vs. recipes).
 
 ## Repo Contents
 
-- [`research/pinterest-research.md`](research/pinterest-research.md) — pain points, existing features, rebrand concept, sourced links
-- [`research/features.md`](research/features.md) — the 3 confirmed feature specs
-- `Pinterest+ POC (source + docs).zip` — team POC source/docs
+- [`research/pinterest-research.md`](research/pinterest-research.md) — pain points, existing features, rebrand concept, precedent research, sourced links
+- [`research/features.md`](research/features.md) — the 3 confirmed feature specs, including the desktop-vs-mobile interaction split for feature 1
 
 ## Status
 
-Research phase complete. Building not yet started.
+Research phase complete. A prior team POC (Next.js app with a working desktop quick-actions bar, `QuickBar.tsx`) was shared and then removed from the repo — its `action-catalog.ts` already covers a superset of feature 1's action list. Building not yet started; that POC should be revisited as a starting point rather than a rewrite once the team resumes.
