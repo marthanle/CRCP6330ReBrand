@@ -81,19 +81,6 @@ Full feature specs live in [features.md](features.md). Findings below validate e
 - Airtable ships six interchangeable views (Grid, Gallery, Kanban, Calendar, Timeline, Form) over the same records, with Gallery view offering a "Customize cards" control for which fields show ([Airtable Support](https://support.airtable.com/docs/getting-started-with-airtable-gallery-views), [Zapier — Airtable Views](https://zapier.com/blog/airtable-views/)).
 - Takeaway: "same data, switchable layout" is an established, low-risk UX pattern in productivity tools — our masonry/grid/list switcher applies that same idea to a visual-discovery context where Pinterest currently offers none of it.
 
-## Scoped MVP (single class session, team of 3–4)
-
-Static/local web app, no real backend or auth, seeded fake dataset (~30 pins: `image, title, source, isAI, linkStatus, trustScore`).
-
-| Feature | Owner | Est. time |
-|---|---|---|
-| Masonry pin grid + board pages | Person A | 1.5h |
-| Save/pin flow + create board + drag between boards | Person B | 1.5h |
-| Search/filter bar incl. "Human only" toggle + link-health badges | Person C | 1.5h |
-| Visual polish, color/type system, trust-score UI, demo data | Person D | 1.5h |
-
-Tech choice: plain HTML/CSS/JS (fastest to demo) or React if team is already fluent.
-
 ## Sources
 - [Pinterest Reviews 2026 — Capterra](https://www.capterra.com/p/234608/Pinterest/reviews/)
 - [Pinterest Reviews — Trustpilot](https://www.trustpilot.com/review/pinterest.com)
