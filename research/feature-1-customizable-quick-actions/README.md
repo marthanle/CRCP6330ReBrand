@@ -44,7 +44,7 @@ The customizable list a user can choose from:
 
 Desktop web has no long-press gesture, so the two platforms trigger the menu differently, but read from the same saved settings:
 
-- **Mobile (touch):** long-pressing a pin opens the user's chosen actions as a popup/bottom-sheet menu.
+- **Mobile (touch):** long-pressing a pin reveals the actions as icons directly over/around the pin — the same in-place behavior Pinterest already has today, not a new popup or bottom sheet. Only the *contents* of those icons change (the user's selected actions instead of the fixed 4).
 - **Desktop (mouse/pointer):** matching real Pinterest's own pattern — hovering a pin reveals a **"..." (three-dot) icon** on the image; clicking it opens the same chosen actions as a menu. The three-dot icon itself is hover-revealed, not always visible — keeps the grid clean by default, exactly like current Pinterest.
 - **Detection:** use `matchMedia('(hover: hover) and (pointer: fine)')` to decide which surface applies, not screen width — a touch-capable laptop or an iPad with a trackpad should get the interaction matching its actual input method.
 
@@ -63,9 +63,9 @@ Desktop web has no long-press gesture, so the two platforms trigger the menu dif
 **B. Using quick actions (on a pin)**
 1. User browses the feed or a board and presses/holds a pin (~500ms).
 2. If the hold is interrupted by finger movement beyond a few pixels (i.e. it was actually a scroll) → nothing opens, gesture is treated as a scroll.
-3. On a successful hold → a popup/bottom-sheet menu opens, showing exactly the actions from the user's saved selection (1–4 of them), in fixed catalog order.
-4. User taps one action → it runs (e.g. Save shows a confirmation toast, Download saves the image, Hide removes the pin from view) and the menu closes.
-5. User can also tap outside the menu or swipe it down to dismiss without choosing an action.
+3. On a successful hold → the existing Pinterest long-press behavior plays out as it already does today (icons appearing directly over/around the pin), but showing exactly the actions from the user's saved selection (1–4 of them), in fixed catalog order, instead of the fixed 4.
+4. User taps one action → it runs (e.g. Save shows a confirmation toast, Download saves the image, Hide removes the pin from view) and the icons dismiss.
+5. User can also tap elsewhere on screen to dismiss without choosing an action — same as current Pinterest behavior.
 
 ## Full user flow — Desktop
 
@@ -106,7 +106,7 @@ This is a well-known accessible-disclosure pattern, cheap to build in from the s
 
 ## New work needed (not in the POC)
 
-1. Mobile long-press handler — the *gesture* already exists on real Pinterest (long-press has always opened its fixed 4-action menu); what's missing is a long-press handler in **our own POC**, since it's a separate demo app built from scratch and only ever had the desktop hover bar implemented. Needs a touch handler with a ~500ms hold timer (`onTouchStart` starts it, `onTouchEnd`/`onTouchCancel` clears it), and the timer must cancel if the finger moves more than a few pixels (so scrolling doesn't accidentally trigger it). On success, reuse the same action-list markup as the desktop popup.
+1. Mobile long-press handler — the *gesture* already exists on real Pinterest (long-press has always opened its fixed 4-action menu); what's missing is a long-press handler in **our own POC**, since it's a separate demo app built from scratch and only ever had the desktop hover bar implemented. Needs a touch handler with a ~500ms hold timer (`onTouchStart` starts it, `onTouchEnd`/`onTouchCancel` clears it), and the timer must cancel if the finger moves more than a few pixels (so scrolling doesn't accidentally trigger it). On success, render the selected actions as in-place icons over/around the pin (matching current Pinterest's existing long-press look), not a popup or bottom sheet — this can still reuse the underlying `ACTION_CATALOG` data/icons from the desktop implementation, just a different container/layout.
 2. Pointer-capability detection (`matchMedia`) wired up at the pin-card level to choose which surface is active.
 3. The Edit → Checklist → Save settings flow, with the blocking-modal min/max validation.
 4. Keyboard accessibility on the three-dot button/popup, as specified above.
