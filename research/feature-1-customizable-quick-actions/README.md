@@ -48,6 +48,44 @@ Desktop web has no long-press gesture, so the two platforms trigger the menu dif
 - **Desktop (mouse/pointer):** matching real Pinterest's own pattern — hovering a pin reveals a **"..." (three-dot) icon** on the image; clicking it opens the same chosen actions as a menu. The three-dot icon itself is hover-revealed, not always visible — keeps the grid clean by default, exactly like current Pinterest.
 - **Detection:** use `matchMedia('(hover: hover) and (pointer: fine)')` to decide which surface applies, not screen width — a touch-capable laptop or an iPad with a trackpad should get the interaction matching its actual input method.
 
+## Full user flow — Mobile
+
+**A. Customizing quick actions (Settings)**
+1. User opens **Settings** and taps the **"Customizable Quick Actions"** row.
+2. View state shows their current selection (default on first use: Save, Share, See more, See less).
+3. User taps **Edit** → checklist of all 10 actions appears, current selections pre-checked.
+4. User taps checkboxes to toggle actions on/off.
+   - If they try to check a 5th box → **blocking modal** appears ("You can select up to 4 actions"); tap OK/dismiss; the 5th box stays unchecked.
+   - If they try to uncheck their last remaining box → **blocking modal** appears ("You must keep at least 1 action"); tap OK/dismiss; the box stays checked.
+5. User taps **Save** → settings screen returns to view state, now showing the updated selection.
+   - If user backs out / navigates away without tapping Save → changes discard silently, prior selection is untouched.
+
+**B. Using quick actions (on a pin)**
+1. User browses the feed or a board and presses/holds a pin (~500ms).
+2. If the hold is interrupted by finger movement beyond a few pixels (i.e. it was actually a scroll) → nothing opens, gesture is treated as a scroll.
+3. On a successful hold → a popup/bottom-sheet menu opens, showing exactly the actions from the user's saved selection (1–4 of them), in fixed catalog order.
+4. User taps one action → it runs (e.g. Save shows a confirmation toast, Download saves the image, Hide removes the pin from view) and the menu closes.
+5. User can also tap outside the menu or swipe it down to dismiss without choosing an action.
+
+## Full user flow — Desktop
+
+**A. Customizing quick actions (Settings)**
+1. Same as mobile steps 1–5 above — the Settings screen and Edit → Checklist → Save flow, and the min/max validation, are identical on both platforms since they're just a webpage either way.
+
+**B. Using quick actions (on a pin)**
+1. User moves their mouse over a pin in the feed or a board.
+2. On hover, a **"..." (three-dot) icon** appears on the image (previously invisible — keeps the grid clean by default).
+3. User clicks the three-dot icon → a menu opens showing exactly the actions from their saved selection (1–4 of them), in fixed catalog order.
+4. User clicks one action → it runs and the menu closes.
+5. User can also click outside the menu to dismiss it without choosing an action.
+6. Moving the mouse away from the pin (without clicking the three-dot icon) simply hides the icon again — no menu was opened, nothing to dismiss.
+
+**C. Keyboard-only variant (desktop)**
+1. User tabs through the page; when focus lands on a pin's three-dot button, it becomes visible (via `:focus-visible`, not just `:hover`).
+2. User presses **Enter** or **Space** → the same menu opens as in step B3.
+3. User presses **Tab** or arrow keys to move between actions in the open menu.
+4. User presses **Enter/Space** on an action to run it (menu closes), or presses **Escape** to close the menu without choosing anything — focus returns to the three-dot button either way.
+
 ## Keyboard accessibility (desktop)
 
 Hover-to-reveal has no equivalent for a keyboard-only user, so:
