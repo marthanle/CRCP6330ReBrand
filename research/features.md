@@ -77,3 +77,51 @@ Users pick which actions appear and (stretch goal) reorder them. The same select
 - Notion's database view switcher lets users change how the same underlying items render (table, board, list, gallery, calendar, etc.) without changing the data itself — switching views is purely presentational ([Notion Help](https://www.notion.com/help/views-filters-and-sorts), [Super.so — All Notion Database Views](https://super.so/blog/notion-database-views)); Notion's Board and Gallery views even expose a "Card size" layout control ([Notion Help — Boards](https://www.notion.com/help/boards)).
 - Airtable ships six interchangeable views (Grid, Gallery, Kanban, Calendar, Timeline, Form) over the same records, with Gallery view offering a "Customize cards" control for which fields show ([Airtable Support](https://support.airtable.com/docs/getting-started-with-airtable-gallery-views), [Zapier — Airtable Views](https://zapier.com/blog/airtable-views/)).
 - Takeaway: "same data, switchable layout" is an established, low-risk UX pattern in productivity tools — our masonry/grid/list switcher applies that same idea to a visual-discovery context where Pinterest currently offers none of it.
+
+---
+
+# Implementation Specs & Edge Cases
+
+Concrete decisions to close the open questions in each feature above, so the team builds from the same assumptions instead of discovering gaps mid-build.
+
+## 1. Customizable Quick Actions
+
+**Action list — decision:** Ship the original 9-action list only (See less, See more, Share, Save, Download image, Hide pin, Report pin, Copy link, Send to board). The POC's extra 4 (React, Send to friend, Add note, Find similar) are out of scope for the demo — cut them from `action-catalog.ts` or leave them coded but unreferenced, team's call, but don't surface them in settings.
+
+**Minimum-actions rule:** A user must always have at least 1 action selected. If they try to uncheck the last one, block it (disable the checkbox or show a small inline message like "Keep at least one action"). An empty quick-bar/long-press menu is a broken state, not a valid customization.
+
+**Reordering — decision:** Cut for the demo. Ship selection only (on/off per action), in the fixed catalog order. Reordering is real added complexity (drag-and-drop, persisting order) for a "nice to have" — call it a stretch goal only if the other two features finish early.
+
+**Settings persistence:** `localStorage`, scoped to the browser/device — explicitly not synced across devices or sessions. State this out loud in the demo ("in a real product this would sync to your account") so it doesn't read as a bug.
+
+**Edge cases:**
+- **No pins on the card / broken image:** quick-bar still renders on hover — actions like Download shouldn't crash on a missing `imageUrl`, just no-op with a toast ("Image unavailable").
+- **Touch device that also has a mouse (e.g. touchscreen laptop, iPad with trackpad):** detect via pointer capability, not screen width — use `(hover: hover) and (pointer: fine)` media query / `matchMedia` to decide hover-bar vs. long-press, not a device-width breakpoint. Otherwise a large touch tablet gets the wrong interaction.
+- **Long-press vs. scroll conflict on mobile:** the touch handler must cancel the long-press timer if the finger moves more than a few pixels (i.e., the user is scrolling, not holding) — otherwise every scroll gesture accidentally triggers the menu.
+- **Settings page opened with everything unchecked (shouldn't be reachable, but):** on load, if stored settings are somehow empty/corrupted, fall back to the 4 Pinterest defaults rather than rendering nothing.
+
+## 2. Chronological Feed Toggle
+
+**Empty state — decision:** If "Newest" has zero pins to show (user follows nobody, or follows are silent), show an explicit empty state ("No new pins from people you follow yet — try For You") rather than a blank feed. A blank screen reads as broken in a demo.
+
+**Toggle persistence — decision:** Reset to "For You" on every fresh load/session; don't persist the choice. Keeps the demo simple and avoids a second piece of stored state to explain — flag as a "real product would remember this" note if asked.
+
+**Edge cases:**
+- **Ties in timestamp (two pins with identical `createdAt`):** add a stable secondary sort key (e.g. pin ID) so ordering doesn't jitter between renders.
+- **Following list changes while toggle is on "Newest":** re-filter live rather than caching a stale follow-list snapshot, so unfollowing someone mid-session removes their pins immediately.
+- **Very small following list (1–2 people):** "Newest" should still look intentional, not sparse/broken — worth checking visually with a small seed subset, not just the full 30-pin dataset.
+
+## 3. Board-View Layout Switcher
+
+**Scope of the toggle — decision:** Per-board, not global. Each board remembers its own layout choice (a recipes board defaults differently than a moodboard would over time), stored keyed by board ID in the same local settings store as feature 1. This was left ambiguous in the original spec ("stretch: persist per board") — resolving it now: per-board is the actual target, not a stretch.
+
+**Edge cases:**
+- **Board with 0–2 pins:** Grid view (4 per row) with only 1–2 items will look like a layout bug, not a feature — either center/left-align a partial row instead of stretching it, or explicitly test this case so it's not a surprise during the demo.
+- **Very long pin titles in List view:** truncate with ellipsis at a fixed line count (e.g. 2 lines) rather than letting text overflow and break the row height.
+- **Mobile Grid breakpoint:** confirmed 2 per row under ~600px (already in the spec above) — but verify square crops don't get so small that text/tags become unreadable; if so, drop to a single column on very small phones instead of 2.
+- **Switching layout mid-scroll:** preserve scroll position (or at least don't jump to the top jarringly) when the user flips the toggle partway down a long board.
+
+## Cross-Feature Decisions
+
+- **One shared preferences store:** features 1 and 3 both need persisted user/board settings — use a single `localStorage` key (e.g. one JSON blob) rather than each feature inventing its own storage scheme, so there's one place to reset/debug state from.
+- **Test with messy data before the demo:** all three features have only been described against clean seed data. Before calling any of them "done," run each against at least one deliberately awkward case — a pin with a missing image, a board with 1 pin, a title long enough to wrap — since demos tend to break on exactly these.
