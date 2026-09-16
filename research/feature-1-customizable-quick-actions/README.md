@@ -106,7 +106,7 @@ This is a well-known accessible-disclosure pattern, cheap to build in from the s
 
 ## New work needed (not in the POC)
 
-1. Mobile long-press handler — doesn't exist yet. Needs a touch handler with a ~500ms hold timer (`onTouchStart` starts it, `onTouchEnd`/`onTouchCancel` clears it), and the timer must cancel if the finger moves more than a few pixels (so scrolling doesn't accidentally trigger it). On success, reuse the same action-list markup as the desktop popup.
+1. Mobile long-press handler — the *gesture* already exists on real Pinterest (long-press has always opened its fixed 4-action menu); what's missing is a long-press handler in **our own POC**, since it's a separate demo app built from scratch and only ever had the desktop hover bar implemented. Needs a touch handler with a ~500ms hold timer (`onTouchStart` starts it, `onTouchEnd`/`onTouchCancel` clears it), and the timer must cancel if the finger moves more than a few pixels (so scrolling doesn't accidentally trigger it). On success, reuse the same action-list markup as the desktop popup.
 2. Pointer-capability detection (`matchMedia`) wired up at the pin-card level to choose which surface is active.
 3. The Edit → Checklist → Save settings flow, with the blocking-modal min/max validation.
 4. Keyboard accessibility on the three-dot button/popup, as specified above.
