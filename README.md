@@ -20,11 +20,21 @@ Full specs and implementation notes for each are in [research/features.md](resea
 2. **Chronological feed toggle** — a "For You" / "Newest" switch on the home feed, so users can escape the algorithmic feed and see strictly newest-first content from who they follow.
 3. **Board-view layout switcher** — per-board toggle between Masonry (today's default), Grid (uniform square crops), and List (thumbnail + title + tags), since one layout doesn't fit all board types (outfits vs. room comparisons vs. recipes).
 
+## Team & Ownership
+
+- **Martha Le** — deep dive on Feature 1 (Customizable Quick Actions): [`research/feature-1-customizable-quick-actions/`](research/feature-1-customizable-quick-actions/)
+- **Rhea** — deep dive on Feature 2 (Chronological Feed Toggle): [`research/feature-2-feedtoggle/`](research/feature-2-feedtoggle/)
+- **Frances Parker** — deep dive on Feature 3 (Board-View Layout Switcher): [`research/feature-3-board-layout-switcher/`](research/feature-3-board-layout-switcher/)
+- **Steve Elias Oregel** — building the combined mockup, bringing all three features together into one app
+
 ## Repo Contents
 
 - [`research/pinterest-research.md`](research/pinterest-research.md) — pain points, existing features, rebrand concept, precedent research, sourced links
 - [`research/features.md`](research/features.md) — the 3 confirmed feature specs, including the desktop-vs-mobile interaction split for feature 1
+- [`research/feature-1-customizable-quick-actions/`](research/feature-1-customizable-quick-actions/) — Martha's deep dive: full action list, settings flow, platform split, edge cases
+- [`research/feature-2-feedtoggle/`](research/feature-2-feedtoggle/) — Rhea's deep dive on the chronological toggle
+- [`research/feature-3-board-layout-switcher/`](research/feature-3-board-layout-switcher/) — Frances's deep dive and code scaffold for the layout switcher
 
 ## Status
 
-Research phase complete. A prior team POC (Next.js app with a working desktop quick-actions bar, `QuickBar.tsx`) was shared and then removed from the repo — its `action-catalog.ts` already covers a superset of feature 1's action list. Building not yet started; that POC should be revisited as a starting point rather than a rewrite once the team resumes.
+Research and per-feature deep dives are complete for all 3 features. Steve is assembling the combined mockup from all three. A prior team POC (Next.js app with a working desktop quick-actions bar, `QuickBar.tsx`) was shared and then removed from the repo — its `action-catalog.ts` already covers a superset of feature 1's action list, and is referenced as a starting point in Martha's deep-dive doc rather than something to rewrite.
